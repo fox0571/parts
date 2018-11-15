@@ -1,61 +1,49 @@
 <template>
   <div class="table">
     <el-row type="flex" class="row-bg" justify="space-between">
-    <el-col :span="12" class="toolbar">
-      <el-form :inline="true" :model="filters" @submit.native.prevent>
-        <el-form-item>
-          <el-input @keyup.enter="fetchItems" v-model="filters.name" placeholder="Search"></el-input>
-        </el-form-item>
-        <el-form-item>
-          <el-button type="submit" @click="fetchItems">Search</el-button>
-        </el-form-item>
-      </el-form>
-    </el-col>
-    <el-col :span="6">
-      <vue-csv-downloader
-          :data="json_data"
-          :fields="fields"
-      > Download
-      </vue-csv-downloader>
-    </el-col>
-    <el-col :span="6" :offset="15">
-      <el-button type="primary" icon="el-icon-edit" @click="dialogFormVisible = true">New</el-button>
-    </el-col>
+        <el-col :span="6">
+        <vue-csv-downloader
+            :data="json_data"
+            :fields="fields"
+            :downloadName="fileName"
+        > Download
+        </vue-csv-downloader>
+        </el-col>
     </el-row>
   <el-table
     v-loading="loading"
     border
-    :data="cases"
+    :data="data"
     style="width: 100%">
     <el-table-column
       type="index"
       width="40">
     </el-table-column>
     <el-table-column
-      prop="model"
+      prop="number"
       sortable
-      label="Model"
+      label="Part Number"
       width="180">
     </el-table-column>
     <el-table-column
-      prop="name_eng"
+      prop="name"
       sortable
       label="Description">
     </el-table-column>
     <el-table-column
-      prop="name_chn"
+      prop="sksid"
       sortable
-      label="中文名">
+      label="SKSID">
     </el-table-column>
     <el-table-column
-      prop="dimension"
+      prop="sn"
       sortable
-      label="Dimension">
+      label="Serial Number">
     </el-table-column>
     <el-table-column
-      prop="spec"
+      prop="qty"
       sortable
-      label="Specification">
+      label="Quantity">
     </el-table-column>
     <el-table-column
       fixed="right"
@@ -63,13 +51,20 @@
       width="120">
       <template slot-scope="scope">
         <el-button type="text" size="small">Detail</el-button>
-        <el-button type="text" size="small">Edit</el-button>
+        <el-button type="text" @click="fetchRequestInfo(scope.$id, scope.row)" size="small">Edit</el-button>
       </template>
     </el-table-column>
   </el-table>
-  <el-dialog width="600px" :visible.sync="dialogFormVisible">
-    <span slot="title"><i class="el-icon-document"></i> New Unit Model </span>
-    <unit-form></unit-form>
+  <el-dialog title="Part Number Edit" :visible.sync="dialogFormVisible">
+    <el-form :model="form" @submit.native.prevent>
+        <el-form-item label="Part number" :label-width="formLabelWidth">
+        <el-input v-model="form.number" autocomplete="off"></el-input>
+        </el-form-item>
+    </el-form>
+    <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">Cancel</el-button>
+        <el-button type="primary" @click="updateRequestInfo">Confirm</el-button>
+    </span>
   </el-dialog>
   <div align="center">
     <el-pagination
@@ -94,49 +89,65 @@
 }
 </style>
 <script>
-import UnitForm from './UnitForm.vue';
 import VueCsvDownloader from 'vue-csv-downloader';
 
 
 export default {
   components: {
-    UnitForm,
     VueCsvDownloader,
   },
   data() {
     return {
-      cases: [],
+      dialogFormVisible: false,
       total: 0,
       currentPage: 1,
-      dialogFormVisible: false,
       filters:{
         name:'',
         type:1
       },
       json_data:[],
+      data:[],
       fields:['sksid','','number','name','qty'],
+      loading: false,
+      fileName:"Parts For Warranty.csv",
+      form: {
+        number: '',
+      },
+      formLabelWidth: '120px',
     };
   },
   methods: {
-    fetchItems() {
-      let uri = "unit/?format=json";
+    fetchPageData(){
+      let uri = "part";
       this.loading = true;
       this.$http
         .get(uri, {
           params: {
             page: this.currentPage,
-            search: this.filters.name,
-            
           }
         })
         .then(response => {
-          this.cases = response.data;
+          this.data = response.data.results;
           this.total = response.data.count;
           this.loading = false;
         });
     },
+    updateRequestInfo(){
+      this.$http
+      .patch("part/"+this.form.id+"/",{
+          number: this.form.number,        
+      })
+      .then(response => {
+        console.log(response.status);
+        this.dialogFormVisible=false;
+      });
+    },
+    fetchRequestInfo(a,b) {
+      this.dialogFormVisible=true;
+      this.form=b;
+    },
     fetchData(){
-      let uri = "part";
+      let uri = "part/warranty";
       this.$http
         .get(uri)
         .then(response => {
@@ -146,11 +157,11 @@ export default {
 
     handleCurrentChange: function(val) {
         this.currentPage = val;
-        this.fetchItems();
+        this.fetchPageData();
     }
   },
   created: function() {
-    this.fetchItems();
+    this.fetchPageData();
     this.fetchData();
   }
 };

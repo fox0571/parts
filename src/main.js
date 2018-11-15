@@ -4,25 +4,20 @@ import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 import App from './App.vue';
 import axios from 'axios';
+import JsonExcel from 'vue-json-excel';
 
-import TagView from './components/TagView.vue';
-import TableView from './components/TableView.vue';
-import UnitView from './components/UnitView.vue';
+import routeConfig from './router/index.js';
 
 Vue.config.productionTip = false
 
 Vue.use(ElementUI);
 Vue.use(VueRouter);
-
+Vue.component('downloadExcel', JsonExcel)
 axios.defaults.baseURL = "http://192.168.5.130/api/"
-// 将axios绑定给vue成为一个属性
 Vue.prototype.$http = axios
-var router = new VueRouter({
-  routes: [
-    { path: '/tag', component: TagView },
-    { path: '/part', component: TableView },
-    { path: '/unit', component: UnitView }
-  ]
+
+const router = new VueRouter({
+  routes: routeConfig
 })
 
 new Vue({

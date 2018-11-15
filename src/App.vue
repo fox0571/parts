@@ -13,16 +13,13 @@
       </el-header>
       <el-container >
       <el-aside width="200px" style="background-color: #B3C0D1">
-        <el-menu :default-openeds="['1', '3']">
-          <el-submenu index="1">
-            <template slot="title"><router-link to="tag" ><i class="el-icon-message"></i>Tag</router-link></template>
-          </el-submenu>
-          <el-submenu index="2">
-            <template slot="title"><i class="el-icon-message"></i><router-link to="part">Inventory</router-link></template>
-          </el-submenu>
-          <el-submenu index="3">
-            <template slot="title"><i class="el-icon-message"></i><router-link to="unit">Unit</router-link></template>
-          </el-submenu>
+        <el-menu
+          :router="true">
+          <el-menu-item v-for="item in menu" :index="item.id" :key="item.componentName">
+            <template slot="title">
+              <span v-text="item.name"></span>
+            </template>
+          </el-menu-item>
         </el-menu>
       </el-aside>
         <el-main>
@@ -44,19 +41,19 @@
   }
 </style>
 <script>
-import HelloWorld from './components/HelloWorld.vue'
 import TableView from './components/TableView.vue'
 import TagView from './components/TagView.vue'
+import menu from '@/config/menu-config'
 
 export default {
   name: 'app',
   components: {
-    HelloWorld,
     TableView,
     TagView,
   },
   data () {
     return {
+      menu:menu,
       total: 0,
       list: [],
       totalCount: 0,
