@@ -11,13 +11,7 @@
         </el-form-item>
       </el-form>
     </el-col>
-    <el-col :span="6">
-      <vue-csv-downloader
-          :data="json_data"
-          :fields="fields"
-      > Download
-      </vue-csv-downloader>
-    </el-col>
+    
     <el-col :span="6" :offset="15">
       <el-button type="primary" icon="el-icon-edit" @click="dialogFormVisible = true">New</el-button>
     </el-col>
@@ -95,13 +89,11 @@
 </style>
 <script>
 import UnitForm from './UnitForm.vue';
-import VueCsvDownloader from 'vue-csv-downloader';
 
 
 export default {
   components: {
     UnitForm,
-    VueCsvDownloader,
   },
   data() {
     return {
@@ -135,15 +127,6 @@ export default {
           this.loading = false;
         });
     },
-    fetchData(){
-      let uri = "part";
-      this.$http
-        .get(uri)
-        .then(response => {
-          this.json_data = response.data;
-        });
-    },
-
     handleCurrentChange: function(val) {
         this.currentPage = val;
         this.fetchItems();
@@ -151,7 +134,6 @@ export default {
   },
   created: function() {
     this.fetchItems();
-    this.fetchData();
   }
 };
 </script>
