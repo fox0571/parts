@@ -1,14 +1,25 @@
 <template>
   <div class="table">
     <el-row type="flex" class="row-bg" justify="space-between">
-        <el-col :span="6">
+      <el-col :span="24" class="toolbar">
+        <el-form :inline="true" :model="filters" @submit.native.prevent>
+          <el-form-item>
+            <el-input @keyup.enter="fetchItems" v-model="filters.name" placeholder="Search"></el-input>
+          </el-form-item>
+          <el-form-item>
+            <el-button type="submit" @click="fetchPageData">Search</el-button>
+          </el-form-item>
+        </el-form>
+      </el-col>
+      <el-col :span="6">
         <vue-csv-downloader
             :data="json_data"
             :fields="fields"
             :downloadName="fileName"
         > Download
         </vue-csv-downloader>
-        </el-col>
+      </el-col>
+
     </el-row>
   <el-table
     v-loading="loading"
@@ -124,6 +135,7 @@ export default {
         .get(uri, {
           params: {
             page: this.currentPage,
+            search: this.filters.name,
           }
         })
         .then(response => {

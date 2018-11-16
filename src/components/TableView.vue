@@ -6,7 +6,7 @@
           <el-input @keyup.enter="fetchItems" v-model="filters.name" placeholder="Search"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="submit" @click="fetchItems">Search</el-button>
+          <el-button type="submit" @click="fetchAllItems">Search</el-button>
         </el-form-item>
       </el-form>
     </el-col>
@@ -149,6 +149,22 @@ export default {
   methods: {
     fetchItems() {
       let uri = "parts/unlinked/?format=json";
+      this.loading = true;
+      this.$http
+        .get(uri, {
+          params: {
+            page: this.currentPage,
+            search: this.filters.name,
+          }
+        })
+        .then(response => {
+          this.cases = response.data.results;
+          this.total = response.data.count;
+          this.loading = false;
+        });
+    },
+    fetchAllItems() {
+      let uri = "parts";
       this.loading = true;
       this.$http
         .get(uri, {
