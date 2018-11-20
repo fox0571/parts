@@ -141,6 +141,7 @@ export default {
       dialogFormVisible: false,
       dialogFormVisible2: false,
       part_title:"",
+      part_id:"",
       part_description:"",
       units:[],
     };
@@ -158,7 +159,6 @@ export default {
         })
         .then(response => {
           this.cases = response.data.results;
-          console.log(response.data);
           this.total = response.data.count;
           this.loading = false;
         });
@@ -182,11 +182,12 @@ export default {
     editKey(a,b){
       this.dialogFormVisible=true;
       this.part_title=b.number;
+      this.part_id=b.id;
       this.part_description=b.name_eng;
       this.current_part_id=b.id;
     },
     updatePartUnit(){
-      let uri="parts/"+this.part_title+"/";
+      let uri="parts/"+this.part_id+"/";
       this.$http
         .patch(uri,{
           unit_set:this.value1,
@@ -195,6 +196,7 @@ export default {
           this.value1=[];
           this.fetchItems();
           this.dialogFormVisible=false;
+          console.log("success");
         });
     },
     fetchAppliedUnits(a,b){
