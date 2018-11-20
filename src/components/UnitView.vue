@@ -61,9 +61,9 @@
       </template>
     </el-table-column>
   </el-table>
-  <el-dialog width="600px" :visible.sync="dialogFormVisible">
+  <el-dialog width="600px" :visible.sync="dialogFormVisible" >
     <span slot="title"><i class="el-icon-document"></i> New Unit Model </span>
-    <unit-form></unit-form>
+    <unit-form v-on:cancel="closeDialog()"></unit-form>
   </el-dialog>
   <div align="center">
     <el-pagination
@@ -90,11 +90,7 @@
 <script>
 import UnitForm from './UnitForm.vue';
 
-
 export default {
-  components: {
-    UnitForm,
-  },
   data() {
     return {
       cases: [],
@@ -108,6 +104,9 @@ export default {
       json_data:[],
       fields:['sksid','','number','name','qty'],
     };
+  },
+  components: {
+    UnitForm,
   },
   methods: {
     fetchItems() {
@@ -130,6 +129,10 @@ export default {
     handleCurrentChange: function(val) {
         this.currentPage = val;
         this.fetchItems();
+    },
+    closeDialog(){
+      this.dialogFormVisible=false;
+      this.fetchItems();
     }
   },
   created: function() {

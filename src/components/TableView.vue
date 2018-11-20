@@ -55,7 +55,7 @@
       label="Operations"
       width="120">
       <template slot-scope="scope">
-        <el-button type="text" @click="fetchAppliedUnits(scope.row)" size="small">Detail</el-button>
+        <el-button type="text" @click="fetchAppliedUnits(scope.$id, scope.row)" size="small">Detail</el-button>
         <el-button type="text" @click="editKey(scope.$id, scope.row)" size="small">Edit</el-button>
       </template>
     </el-table-column>
@@ -96,7 +96,6 @@
     </el-pagination>
   </div>
   </div>
-  
 </template>
 
 <style>
@@ -159,6 +158,7 @@ export default {
         })
         .then(response => {
           this.cases = response.data.results;
+          console.log(response.data);
           this.total = response.data.count;
           this.loading = false;
         });
@@ -197,7 +197,7 @@ export default {
           this.dialogFormVisible=false;
         });
     },
-    fetchAppliedUnits(b){
+    fetchAppliedUnits(a,b){
       this.dialogFormVisible2=true;
       let unit_list=b.unit_set;
       let promises=[];
@@ -206,14 +206,13 @@ export default {
       for (let i=0;i<unit_list.length;i++){
         promises.push(this.$http.get(url_prefix+unit_list[i]));
       }
+      console.log(b.unit_set);
       this.$http.all(promises)
-        .then(function(unit) {
-          let temp = unit.map(r => r.data);
-          for (let i = 0; i < temp.length; i++) {
-            unit_data.push(temp[i].model)
-          }
-          this.unit=unit_data;
-        })
+        .then(this.$http.spread((...responses) => {
+          responses.forEach((response) => {
+            console.log(responses);
+          })
+        }))
     },
     handleCurrentChange: function(val) {
         this.currentPage = val;

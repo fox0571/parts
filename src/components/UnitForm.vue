@@ -15,18 +15,19 @@
     <el-form-item label="Specification">
         <el-input v-model="unitForm.spec"></el-input>
     </el-form-item>
-    <el-button type="primary" >Cancel</el-button>
+    <el-button type="primary" @click="close()">Cancel</el-button>
     <el-button type="primary" @click="submitForm('unitForm')">Submit</el-button>
   </el-form>
 </template>
 
 <script>
+
   export default {
     data() {
       return {
         labelPosition: 'right',
         unitForm: {
-          part:[],
+          part:[''],
           model: '',
           name_eng: '',
           name_chn: '',
@@ -35,16 +36,20 @@
         }
       };
     },
+    
     methods:{
-        submitForm(formName){
+      submitForm(formName){
         let uri="unit/";
         let body=this.unitForm;
         this.$http.post(uri,body)
         .then(response => {
-            Console.log(response);
-            this.fetchItems();
+            this.close();
         })
-    },
+      },
+      close(){
+        //console.log("here");
+        this.$emit('cancel');
+      }
     }
   }
 </script>
