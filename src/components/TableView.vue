@@ -111,7 +111,7 @@
 export default {
   data() {
     const generateData = _ => {
-      let uri = "unit/?format=json";
+      let uri = "unit/all/";
       const data = [];
       var data_raw = []
       this.$http
