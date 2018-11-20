@@ -110,7 +110,7 @@ export default {
   },
   methods: {
     fetchItems() {
-      let uri = "unit/?format=json";
+      let uri = "unit/";
       this.loading = true;
       this.$http
         .get(uri, {
@@ -121,7 +121,7 @@ export default {
           }
         })
         .then(response => {
-          this.cases = response.data;
+          this.cases = response.data.results;
           this.total = response.data.count;
           this.loading = false;
         });
