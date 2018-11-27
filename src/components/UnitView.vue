@@ -1,85 +1,34 @@
 <template>
-  <div class="table">
+  <div class="table" >
     <el-row type="flex" class="row-bg" justify="space-between">
-    <el-col :span="12" class="toolbar">
-      <el-form :inline="true" :model="filters" @submit.native.prevent>
-        <el-form-item>
-          <el-input @keyup.enter="fetchItems" v-model="filters.name" placeholder="Search"></el-input>
-        </el-form-item>
-        <el-form-item>
-          <el-button type="submit" @click="fetchItems">Search</el-button>
-        </el-form-item>
-      </el-form>
-    </el-col>
-    
-    <el-col :span="6" :offset="15">
-      <el-button type="primary" icon="el-icon-edit" @click="dialogFormVisible = true">New</el-button>
-    </el-col>
+      <el-col :span="12" class="toolbar">
+        <el-form :inline="true" :model="filters" @submit.native.prevent>
+          <el-form-item>
+            <el-input @keyup.enter.native="fetchItems" v-model="filters.name" placeholder="Search"></el-input>
+          </el-form-item>
+          <el-form-item>
+            <el-button type="submit" @click="fetchItems">Search</el-button>
+          </el-form-item>
+        </el-form>
+      </el-col>
+      
+      <el-col :span="6" :offset="15">
+        <el-button type="primary" icon="el-icon-edit" @click="dialogFormVisible = true">New</el-button>
+      </el-col>
     </el-row>
-  <el-table
-    v-loading="loading"
-    border
-    :data="cases"
-    style="width: 100%">
-    <el-table-column
-      type="index"
-      width="40">
-    </el-table-column>
-    <el-table-column
-      prop="model"
-      sortable
-      label="Model"
-      width="180">
-    </el-table-column>
-    <el-table-column
-      prop="name_eng"
-      sortable
-      label="Description">
-    </el-table-column>
-    <el-table-column
-      prop="name_chn"
-      sortable
-      label="中文名">
-    </el-table-column>
-    <el-table-column
-      prop="dimension"
-      sortable
-      label="Dimension">
-    </el-table-column>
-    <el-table-column
-      prop="spec"
-      sortable
-      label="Specification">
-    </el-table-column>
-    <el-table-column
-      fixed="right"
-      label="Operations"
-      width="120">
-      <template slot-scope="scope">
-        <el-button type="text" size="small" @click="fetchUnitDetail(scope.$id, scope.row)">Detail</el-button>
-        <el-button type="text" size="small">Edit</el-button>
-      </template>
-    </el-table-column>
-  </el-table>
-  <el-dialog width="600px" :visible.sync="dialogFormVisible" >
-    <span slot="title"><i class="el-icon-document"></i> New Unit Model </span>
-    <unit-form v-on:cancel="closeDialog()"></unit-form>
-  </el-dialog>
-  <el-dialog width="600px" :visible.sync="partListForUnit" >
-    <span slot="title"><i class="el-icon-document"></i> Part List </span>
     <el-table
+      v-loading="loading"
       border
-      v-loading="partLoading"
-      :data="parts"
+      :data="cases"
       style="width: 100%">
       <el-table-column
         type="index"
         width="40">
       </el-table-column>
       <el-table-column
-        prop="number"
+        prop="model"
         sortable
-        label="Part Number"
+        label="Model"
         width="180">
       </el-table-column>
       <el-table-column
@@ -87,23 +36,73 @@
         sortable
         label="Description">
       </el-table-column>
+      <el-table-column
+        prop="name_chn"
+        sortable
+        label="中文名">
+      </el-table-column>
+      <el-table-column
+        prop="dimension"
+        sortable
+        label="Dimension">
+      </el-table-column>
+      <el-table-column
+        prop="spec"
+        sortable
+        label="Specification">
+      </el-table-column>
+      <el-table-column
+        fixed="right"
+        label="Operations"
+        width="120">
+        <template slot-scope="scope">
+          <el-button type="text" size="small" @click="fetchUnitDetail(scope.$id, scope.row)">Detail</el-button>
+          <el-button type="text" size="small">Edit</el-button>
+        </template>
+      </el-table-column>
     </el-table>
-    <span slot="footer" class="dialog-footer">
-        <el-button @click="partListForUnit = false">Cancel</el-button>
-        <el-button @click="partListForUnit = false">Confirm</el-button>
-    </span>
-  </el-dialog>
-  <div align="center">
-    <el-pagination
-        @current-change="handleCurrentChange"
-        :current-page="currentPage"
-        :page-size=50
-        layout="total, prev, pager, next, jumper"
-        :total="total">
-    </el-pagination>
+    <el-dialog width="600px" :visible.sync="dialogFormVisible" >
+      <span slot="title"><i class="el-icon-document"></i> New Unit Model </span>
+      <unit-form v-on:cancel="closeDialog()"></unit-form>
+    </el-dialog>
+    <el-dialog width="600px" :visible.sync="partListForUnit" >
+      <span slot="title"><i class="el-icon-document"></i> Part List </span>
+      <el-table
+        border
+        v-loading="partLoading"
+        :data="parts"
+        style="width: 100%">
+        <el-table-column
+          type="index"
+          width="40">
+        </el-table-column>
+        <el-table-column
+          prop="number"
+          sortable
+          label="Part Number"
+          width="180">
+        </el-table-column>
+        <el-table-column
+          prop="name_eng"
+          sortable
+          label="Description">
+        </el-table-column>
+      </el-table>
+      <span slot="footer" class="dialog-footer">
+          <el-button @click="partListForUnit = false">Cancel</el-button>
+          <el-button @click="partListForUnit = false">Confirm</el-button>
+      </span>
+    </el-dialog>
+    <div align="center">
+      <el-pagination
+          @current-change="handleCurrentChange"
+          :current-page="currentPage"
+          :page-size=50
+          layout="total, prev, pager, next, jumper"
+          :total="total">
+      </el-pagination>
+    </div>
   </div>
-  </div>
-  
 </template>
 
 <style>

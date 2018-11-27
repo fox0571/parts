@@ -3,7 +3,7 @@
     <el-col :span="24" class="toolbar">
       <el-form :inline="true" :model="filters" @submit.native.prevent>
         <el-form-item>
-          <el-input @keyup.enter="fetchItems" v-model="filters.name" placeholder="Search"></el-input>
+          <el-input @keyup.enter.native="fetchAllItems" v-model="filters.name" placeholder="Search"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button type="submit" @click="fetchAllItems">Search</el-button>
@@ -176,6 +176,7 @@ export default {
         .then(response => {
           this.cases = response.data.results;
           this.total = response.data.count;
+          this.value1 = response.data.results.unit_set;
           this.loading = false;
         });
     },
@@ -185,6 +186,7 @@ export default {
       this.part_id=b.id;
       this.part_description=b.name_eng;
       this.current_part_id=b.id;
+      this.value1 = b.unit_set;
     },
     updatePartUnit(){
       let uri="parts/"+this.part_id+"/";
@@ -194,9 +196,8 @@ export default {
         })
         .then(response => {
           this.value1=[];
-          this.fetchItems();
+          this.fetchAllItems();
           this.dialogFormVisible=false;
-          console.log("success");
         });
     },
     fetchAppliedUnits(a,b){
@@ -208,21 +209,19 @@ export default {
       for (let i=0;i<unit_list.length;i++){
         promises.push(this.$http.get(url_prefix+unit_list[i]));
       }
-      console.log(b.unit_set);
       this.$http.all(promises)
         .then(this.$http.spread((...responses) => {
           responses.forEach((response) => {
-            console.log(responses);
           })
         }))
     },
     handleCurrentChange: function(val) {
         this.currentPage = val;
-        this.fetchItems();
+        this.fetchAllItems();
     }
   },
   created: function() {
-    this.fetchItems();
+    this.fetchAllItems();
   }
 };
 </script>
