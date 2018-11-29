@@ -198,6 +198,17 @@ export default {
           this.value1=[];
           this.fetchAllItems();
           this.dialogFormVisible=false;
+        })
+        .catch(function (error) {
+          alert('Sorry you do not have this permission', 'Permission Error', {
+          confirmButtonText: 'OK',
+          callback: action => {
+            this.$message({
+              type: 'info',
+              message: `action: ${ action }`
+            });
+          }
+        });
         });
     },
     fetchAppliedUnits(a,b){
