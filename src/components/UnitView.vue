@@ -4,10 +4,10 @@
       <el-col :span="12" class="toolbar">
         <el-form :inline="true" :model="filters" @submit.native.prevent>
           <el-form-item>
-            <el-input @keyup.enter.native="fetchItems" v-model="filters.name" placeholder="Search"></el-input>
+            <el-input @keyup.enter.native="searchItems" v-model="filters.name" placeholder="Search"></el-input>
           </el-form-item>
           <el-form-item>
-            <el-button type="submit" @click="fetchItems">Search</el-button>
+            <el-button type="submit" @click="searchItems">Search</el-button>
           </el-form-item>
           <el-form-item>
             <i class="el-icon-question" @click="howToDialogVisible=true">How to</i>
@@ -82,13 +82,25 @@
           prop="number"
           sortable
           label="Part Number"
-          width="180">
+          width="120">
         </el-table-column>
         <el-table-column
           prop="name_eng"
           sortable
-          label="Description">
+          label="Description"
+          width="180">
         </el-table-column>
+        <el-table-column
+          prop="after_market_code"
+          
+          label="Spec">
+        </el-table-column>
+        <el-table-column
+          prop="price_list"
+          sortable
+          label="List Price">
+        </el-table-column>
+        
       </el-table>
       <span slot="footer" class="dialog-footer">
           <el-button @click="partListForUnit = false">Cancel</el-button>
@@ -205,6 +217,21 @@ export default {
             page: this.currentPage,
             search: this.filters.name,
             
+          }
+        })
+        .then(response => {
+          this.cases = response.data.results;
+          this.total = response.data.count;
+          this.loading = false;
+        });
+    },
+    searchItems() {
+      let uri = "unit/";
+      this.loading = true;
+      this.$http
+        .get(uri, {
+          params: {
+            search: this.filters.name,
           }
         })
         .then(response => {

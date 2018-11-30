@@ -3,7 +3,7 @@
     <el-col :span="24" class="toolbar">
       <el-form :inline="true" :model="filters" @submit.native.prevent>
         <el-form-item>
-          <el-input @keyup.enter.native="fetchAllItems" v-model="filters.name" placeholder="Search"></el-input>
+          <el-input @keyup.enter.native="searchItems" v-model="filters.name" placeholder="Search"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button type="submit" @click="fetchAllItems">Search</el-button>
@@ -147,13 +147,12 @@ export default {
     };
   },
   methods: {
-    fetchItems() {
-      let uri = "parts/unlinked/?format=json";
+    searchItems() {
+      let uri = "parts";
       this.loading = true;
       this.$http
         .get(uri, {
           params: {
-            page: this.currentPage,
             search: this.filters.name,
           }
         })
