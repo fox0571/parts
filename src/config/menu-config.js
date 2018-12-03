@@ -1,22 +1,22 @@
 export default [
     {
-        name: 'Tag',
-        id: 'tag',
-        componentName: 'TagView',
-    }, 
-    {
-        name: 'Inventory',
-        id: 'inventory',
-        componentName: 'TableView',
-    }, 
-    {
-        name: 'Unit',
-        id: 'unit',
+        name: 'Units',
+        id: 'units',
         componentName: 'UnitView'
     },
     {
-        name: 'Request',
-        id: 'request',
-        componentName: 'RequestView'
-    },
+        name: 'Parts',
+        id: 'parts',
+        componentName: 'TableView',
+    }, 
+    {
+        name: 'Tags',
+        id: 'tags',
+        componentName: 'TagView',
+    }, 
+    // {
+    //     name: 'Request',
+    //     id: 'request',
+    //     componentName: 'RequestView'
+    // },
 ]

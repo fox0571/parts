@@ -6,15 +6,15 @@ import RequestView from '@/components/RequestView.vue';
 
 export default [
   {
-    path: '/tag', component: TagView,
+    path: '/units', component: UnitView,
   },
   {
-    path: '/inventory', component: TableView,
+    path: '/parts', component: TableView,
   },
   {
-    path: '/unit', component: UnitView,
+    path: '/tags', component: TagView,
   },
-  {
-    path: '/request', component: RequestView,
-  }
+  // {
+  //   path: '/request', component: RequestView,
+  // }
 ]

@@ -14,7 +14,7 @@
           </el-form-item>
         </el-form>
       </el-col>
-      <el-col :span="6" :offset="15">
+      <el-col :span="10" :offset="0">
         <el-button type="primary" icon="el-icon-edit" @click="dialogFormVisible = true">New</el-button>
       </el-col>
     </el-row>
@@ -22,7 +22,7 @@
       v-loading="loading"
       border
       :data="cases"
-      style="width: 100%">
+      style="width: 70%">
       <el-table-column
         type="index"
         width="40">
@@ -43,7 +43,7 @@
         sortable
         label="中文名">
       </el-table-column>
-      <el-table-column
+      <!-- <el-table-column
         prop="dimension"
         sortable
         label="Dimension">
@@ -52,7 +52,7 @@
         prop="spec"
         sortable
         label="Specification">
-      </el-table-column>
+      </el-table-column> -->
       <el-table-column
         fixed="right"
         label="Operations"
@@ -69,39 +69,14 @@
     </el-dialog>
     <el-dialog width="600px" :visible.sync="partListForUnit" >
       <span slot="title"><i class="el-icon-document"></i> Part List </span>
-      <el-table
-        border
+      <el-form :inline="true" :model="filters" @submit.native.prevent>
+        Filter <el-input size="small" name="query" v-model="searchQuery"></el-input>
+      </el-form>
+      <part-list
         v-loading="partLoading"
         :data="parts"
-        style="width: 100%">
-        <el-table-column
-          type="index"
-          width="40">
-        </el-table-column>
-        <el-table-column
-          prop="number"
-          sortable
-          label="Part Number"
-          width="120">
-        </el-table-column>
-        <el-table-column
-          prop="name_eng"
-          sortable
-          label="Description"
-          width="180">
-        </el-table-column>
-        <el-table-column
-          prop="after_market_code"
-          
-          label="Spec">
-        </el-table-column>
-        <el-table-column
-          prop="price_list"
-          sortable
-          label="List Price">
-        </el-table-column>
-        
-      </el-table>
+        :filter-key="searchQuery">
+      </part-list>
       <span slot="footer" class="dialog-footer">
           <el-button @click="partListForUnit = false">Cancel</el-button>
           <el-button @click="partListForUnit = false">Confirm</el-button>
@@ -111,7 +86,7 @@
       title="How to"
       :visible.sync="howToDialogVisible"
       width="40%">
-      <p>1.Get the  model number of the unit. </p>
+      <p>1. Get the  model number of the unit. </p>
       <p>2. Type in/ put the model number in the search bar at the top of the page and click enter. </p>
       <p>3. Make sure you verify the model number as GR or non-GR for cold units before selecting the unit.  </p>
       <p>4. Select "Details" tab located below opeartions column for the desired unit. </p>
@@ -159,6 +134,7 @@
 </style>
 <script>
 import UnitForm from './UnitForm.vue';
+import PartList from './PartList.vue';
 
 export default {
   data() {
@@ -202,10 +178,12 @@ export default {
       part_list:generateData(),
       value1:[],
       partLoading:false,
+      searchQuery: '',
     };
   },
   components: {
     UnitForm,
+    PartList,
   },
   methods: {
     fetchItems() {
@@ -245,6 +223,7 @@ export default {
         this.fetchItems();
     },
     fetchUnitDetail(a,b){
+      this.searchQuery="";
       this.partListForUnit=true;
       this.partLoading=true;
       let uri="unit/"+b.id+"/";

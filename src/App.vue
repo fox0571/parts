@@ -9,7 +9,6 @@
             <el-dropdown-item>Delete</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
-        <span>Tom</span>
       </el-header>
       <el-container >
       <el-aside width="200px" style="background-color: #B3C0D1">
