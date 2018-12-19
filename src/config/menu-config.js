@@ -13,7 +13,12 @@ export default [
         name: 'Tags',
         id: 'tags',
         componentName: 'TagView',
-    }, 
+    },
+    // {
+    //     name: 'POs',
+    //     id: 'pos',
+    //     componentName: 'OrderContainer',
+    // }, 
     // {
     //     name: 'Request',
     //     id: 'request',

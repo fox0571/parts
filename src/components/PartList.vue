@@ -21,8 +21,8 @@
         width="180">
     </el-table-column>
     <el-table-column
-        prop="after_market_code"
-        label="Spec">
+        prop="weight"
+        label="Weight">
     </el-table-column>
     <el-table-column
         prop="price_list"
@@ -39,7 +39,6 @@
       data: Array,
       filterKey: String
     },
-    
     computed: {
       filteredData: function () {
         var filterKey = this.filterKey && this.filterKey.toLowerCase()

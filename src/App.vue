@@ -19,6 +19,19 @@
               <span v-text="item.name"></span>
             </template>
           </el-menu-item>
+<!-- 
+          <el-submenu index="2">
+          <template slot="title">
+            <i class="el-icon-location"></i>
+            <span>PO</span>
+          </template>
+          <el-menu-item-group>
+            <el-menu-item index="new">New</el-menu-item>
+            <el-menu-item index="ordered">Ordered</el-menu-item>
+            <el-menu-item index="shipped">Shipped</el-menu-item>
+            <el-menu-item index="received">Received</el-menu-item>
+          </el-menu-item-group> 
+        </el-submenu>-->
         </el-menu>
       </el-aside>
         <el-main>

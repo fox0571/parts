@@ -55,7 +55,7 @@
       label="Operations"
       width="120">
       <template slot-scope="scope">
-        <el-button type="text" @click="fetchAppliedUnits(scope.$id, scope.row)" size="small">Detail</el-button>
+        <el-button type="text" @click="fetchAppliedUnits(scope.$id, scope.row)" size="small">Order</el-button>
         <el-button type="text" @click="editKey(scope.$id, scope.row)" size="small">Edit</el-button>
       </template>
     </el-table-column>
@@ -78,13 +78,10 @@
     </span>
   </el-dialog>
   <el-dialog width="600px" :visible.sync="dialogFormVisible2">
-    <li v-for="unit in units">
-      {{unit}}
-    </li>
-    <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible2 = false">Cancel</el-button>
-        <el-button @click="dialogFormVisible2 = false">Confirm</el-button>
-    </span>
+    <po-post
+    v-on:cancel="dialogFormVisible2=false"
+    :id="id">
+    </po-post>
   </el-dialog>
   <div align="center">
     <el-pagination
@@ -108,6 +105,7 @@
 }
 </style>
 <script>
+import PoPost from './POPost.vue';
 export default {
   data() {
     const generateData = _ => {
@@ -144,7 +142,11 @@ export default {
       part_id:"",
       part_description:"",
       units:[],
+      id:0,
     };
+  },
+  components: {
+    PoPost,
   },
   methods: {
     searchItems() {
@@ -212,18 +214,9 @@ export default {
     },
     fetchAppliedUnits(a,b){
       this.dialogFormVisible2=true;
-      let unit_list=b.unit_set;
-      let promises=[];
-      let unit_data=[];
-      let url_prefix="unit/";
-      for (let i=0;i<unit_list.length;i++){
-        promises.push(this.$http.get(url_prefix+unit_list[i]));
-      }
-      this.$http.all(promises)
-        .then(this.$http.spread((...responses) => {
-          responses.forEach((response) => {
-          })
-        }))
+      this.id=b.id;
+      //console.log(b.id);
+      //console.log(this.id);
     },
     handleCurrentChange: function(val) {
         this.currentPage = val;
