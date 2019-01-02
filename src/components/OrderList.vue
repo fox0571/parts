@@ -105,11 +105,12 @@ export default {
       csvContent += OrderHeader
       for (var i=0;i<data.length;i++){
         var row="";
-        row+=(data[i].parts.number+",");
-        let name=data[i].parts.name_eng.split(",").join("_");
+        row+=(data[i].part.number+",");
+        //console.log(row);
+        let name=data[i].part.name_eng.split(",").join("_");
         row+=(name+","+data[i].qty+",");
         //console.log(data[i].parts)
-        let models=data[i].parts.unit_set[0].model
+        let models=data[i].part.unit_set[0].model
         row+=(models+","+data[i].branch+"\n")
         csvContent += row
       }
