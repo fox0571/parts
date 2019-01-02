@@ -118,7 +118,7 @@ export default {
       const link = document.createElement("a");
       let filename="PARTS_ORDER_"
       let date=new Date()
-      let month=date.getMonth()
+      let month=date.getMonth()+1
       let day=date.getDate()
       let year=date.getFullYear()
       filename+=month+"_"+day+"_"+year+".csv"
