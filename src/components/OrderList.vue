@@ -15,13 +15,13 @@
         width="40">
       </el-table-column>
       <el-table-column
-        prop="parts.number"
+        prop="part.number"
         sortable
         label="Number"
         width="180">
       </el-table-column>
       <el-table-column
-        prop="parts.name_eng"
+        prop="part.name_eng"
         sortable
         label="Description">
       </el-table-column>
@@ -98,24 +98,19 @@ export default {
     //   })
     // },
     csvExport(arrData) {
-      let data=this.multipleSelection
-      //console.log(this.multipleSelection)
+      let data=arrData
+      //console.log(data)
       let csvContent = "data:text/csv;charset=utf-8,";
       let OrderHeader="PART NUMBER,ENGLISH NAME,QUANTITY,APPLY FOR,BRANCH,REMARK\n"
-      // csvContent += [
-      //   Object.keys(arrData[0]).join(","),
-      //   ...arrData.map(item => Object.values(item).join(","))
-      // ]
       csvContent += OrderHeader
       for (var i=0;i<data.length;i++){
-        //console.log(data[i])
         var row="";
         row+=(data[i].parts.number+",");
-        let name=data[i].parts.name_eng.replace(",","_");
+        let name=data[i].parts.name_eng.split(",").join("_");
         row+=(name+","+data[i].qty+",");
-        let model=data[i].parts.unit_set[0].model
-        //console.log(model)
-        row+=(model+","+data[i].branch+"\n")
+        //console.log(data[i].parts)
+        let models=data[i].parts.unit_set[0].model
+        row+=(models+","+data[i].branch+"\n")
         csvContent += row
       }
       const datas = encodeURI(csvContent);
@@ -132,7 +127,6 @@ export default {
     },
     fetchItems() {
       let st=this.status
-      console.log(st)
       let uri = "po/"+st;
       this.loading = true;
       this.$http

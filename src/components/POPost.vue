@@ -67,7 +67,7 @@
           label: 'Groveport, OH'
         }],
         poForm: {
-          parts: this.id,
+          part: this.id,
           qty: 5,
           branch: '',
         }
@@ -76,7 +76,8 @@
     methods:{
       submitForm(formName){
         let uri="po/";
-        this.poForm.parts=this.id;
+        this.poForm.part=this.id;
+        console.log(this.poForm.part)
         let body=this.poForm;
         console.log(body);
         this.$http.post(uri,body)

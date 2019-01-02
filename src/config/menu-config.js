@@ -18,7 +18,12 @@ export default [
     //     name: 'POs',
     //     id: 'pos',
     //     componentName: 'OrderContainer',
-    // }, 
+    // },
+    // {
+    //     name: 'Warranty Check',
+    //     id: 'warranty',
+    //     componentName: 'WarrantyView',
+    // },  
     // {
     //     name: 'Request',
     //     id: 'request',
